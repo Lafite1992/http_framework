@@ -56,8 +56,8 @@ public class RequestTask implements Runnable {
         String json;
         try {
             if (!NetWorkUtil.isConnect(HttpApplication.getContext()) &&
-                    mRequest.getDataMode() == DataMode.DATA_FROM_NET_NEED_CACHE ||
-                    mRequest.getDataMode() == DATA_FROM_NET_NO_CACHE) {
+                    (mRequest.getDataMode() == DataMode.DATA_FROM_NET_NEED_CACHE ||
+                    mRequest.getDataMode() == DATA_FROM_NET_NO_CACHE)) {
                 //断网处理
                 onFailure(new HttpException(HttpException.ErrorType.IO, "network disconnect"));
                 return;
@@ -104,7 +104,7 @@ public class RequestTask implements Runnable {
                         } else {
                             Object o = mRequest.getResponseCallback().bindData(data);
                             onSuccess(o);
-                            //成功才能緩存
+                            //成功才能缓存
                             if (isCache) {
                                 DataUtil.cacheJson(mRequest.getUrl(), json);
                             }
