@@ -6,14 +6,14 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
+ * 解析json
  * Created by Henry on 2017/3/27.
  */
 
 public abstract class JsonCallback<T> extends AbsResponseCallback<T> {
     @Override
-    public T bindData(Object data) {
+    public T bindData(String json) {
         Type type = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        T t = new Gson().fromJson(data.toString(), type);
-        return t;
+        return new Gson().fromJson(json, type);
     }
 }

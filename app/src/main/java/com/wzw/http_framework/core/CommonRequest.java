@@ -4,7 +4,6 @@ import com.wzw.http_framework.callback.AbsResponseCallback;
 import com.wzw.http_framework.protocol.DataMode;
 import com.wzw.http_framework.protocol.HttpMethod;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -19,6 +18,7 @@ public class CommonRequest {
     private HttpMethod mMethod = HttpMethod.GET;
     private Map<String, String> mPostParameters;
     private Map<String,String> mHeaders;
+    private String mTag;
 
     private CommonRequest(Builder builder) {
         this.mUrl = builder.mUrl;
@@ -27,7 +27,10 @@ public class CommonRequest {
         this.mMethod = builder.mMethod;
         this.mPostParameters = builder.mPostParameters;
         this.mResponseCallback = builder.mResponseCallback;
+        this.mTag = builder.mTag;
     }
+
+
     public String getUrl() {
         return mUrl;
     }
@@ -49,6 +52,9 @@ public class CommonRequest {
         return mMethod;
     }
 
+    public String getTag() {
+        return mTag;
+    }
 
     public AbsResponseCallback getResponseCallback() {
         return mResponseCallback;
@@ -60,6 +66,7 @@ public class CommonRequest {
         private HttpMethod mMethod = HttpMethod.GET;
         private Map<String, String> mPostParameters;
         private Map<String,String> mHeaders;
+        private String mTag;
 
 
         public Builder setUrl(String url) {
@@ -72,7 +79,7 @@ public class CommonRequest {
             return this;
         }
 
-        public Builder setHeaders(HashMap<String, String> headers) {
+        public Builder setHeaders(Map<String, String> headers) {
             this.mHeaders = headers;
             return this;
         }
@@ -82,13 +89,18 @@ public class CommonRequest {
             return this;
         }
 
-        public Builder setPostParameters(HashMap<String, String> postParameters) {
+        public Builder setPostParameters(Map<String, String> postParameters) {
             this.mPostParameters = postParameters;
             return this;
         }
 
         public Builder setResponseCallback(AbsResponseCallback responseCallback) {
             this.mResponseCallback = responseCallback;
+            return this;
+        }
+
+        public Builder setTag(String tag) {
+            this.mTag = tag;
             return this;
         }
 

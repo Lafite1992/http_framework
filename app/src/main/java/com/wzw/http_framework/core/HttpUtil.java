@@ -35,6 +35,7 @@ public class HttpUtil {
     private static OkHttpClient sOkHttpClient;
 
     public static String get(String url) {
+        LogUtil.e("HttpUtil", url);
         Request request= new Request.Builder()
                 .url(url)
                 .build();
@@ -54,6 +55,7 @@ public class HttpUtil {
     }
 
     public static String get(String url, Map<String,String> headers ) {
+        LogUtil.e("HttpUtil", url);
         Request request;
         Request.Builder builder = new Request.Builder();
         if (headers.size() > 0){
@@ -80,6 +82,7 @@ public class HttpUtil {
     }
 
     public static String post(String url, Map<String, String> postParameters) {
+        LogUtil.e("HttpUtil", url);
         try {
             FormBody.Builder builder = new FormBody.Builder();
             if  (postParameters == null) {
@@ -108,6 +111,7 @@ public class HttpUtil {
     }
 
     public static String put(String url, Map<String, String> postParameters) {
+        LogUtil.e("HttpUtil", url);
         try {
             FormBody.Builder builder = new FormBody.Builder();
             if  (postParameters == null) {
@@ -138,6 +142,7 @@ public class HttpUtil {
     }
 
     public static String delete(String url, Map<String, String> postParameters) {
+        LogUtil.e("HttpUtil", url);
         try {
             FormBody.Builder builder = new FormBody.Builder();
             if  (postParameters == null) {

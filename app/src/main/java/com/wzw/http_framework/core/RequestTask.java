@@ -14,8 +14,6 @@ import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.wzw.http_framework.protocol.DataMode.DATA_FROM_NET_NO_CACHE;
-
 
 /**
  * Http异步任务
@@ -28,9 +26,15 @@ public class RequestTask implements Runnable {
     private CommonRequest mRequest;
     private final AtomicBoolean mCancelled = new AtomicBoolean();
     private boolean isCache;
+    private boolean isCompleted;
 
     public RequestTask(CommonRequest request) {
         this.mRequest = request;
+    }
+
+
+    public boolean isCompleted() {
+        return isCompleted;
     }
 
     public void execute() {
@@ -42,7 +46,7 @@ public class RequestTask implements Runnable {
         CoreExecutorService.cancel(this);
     }
 
-    private boolean isCancelled() {
+    public boolean isCancelled() {
         return mCancelled.get();
     }
 
@@ -57,7 +61,7 @@ public class RequestTask implements Runnable {
         try {
             if (!NetWorkUtil.isConnect(HttpApplication.getContext()) &&
                     (mRequest.getDataMode() == DataMode.DATA_FROM_NET_NEED_CACHE ||
-                    mRequest.getDataMode() == DATA_FROM_NET_NO_CACHE)) {
+                            mRequest.getDataMode() == DataMode.DATA_FROM_NET_NO_CACHE)) {
                 //断网处理
                 onFailure(new HttpException(HttpException.ErrorType.IO, "network disconnect"));
                 return;
@@ -92,24 +96,20 @@ public class RequestTask implements Runnable {
                     isCache = false;
                     break;
             }
+            LogUtil.i(TAG, json);
             if (!TextUtils.isEmpty(json)) {
                 JSONObject jsonObject = new JSONObject(json);
                 if (jsonObject.has("code")) {
                     int code = jsonObject.optInt("code");
-                    String message = jsonObject.optString("message");
                     if (code == 0) {
-                        Object data = jsonObject.opt("data");
-                        if (data == null) {
-                            onFailure(new HttpException(HttpException.ErrorType.SERVER, code, message));
-                        } else {
-                            Object o = mRequest.getResponseCallback().bindData(data);
-                            onSuccess(o);
-                            //成功才能缓存
-                            if (isCache) {
-                                DataUtil.cacheJson(mRequest.getUrl(), json);
-                            }
+                        Object o = mRequest.getResponseCallback().bindData(json);
+                        onSuccess(o);
+                        isCompleted = true;
+                        //成功才能缓存
+                        if (isCache) {
+                            DataUtil.cacheJson(mRequest.getUrl(), json);
                         }
-                    }else {
+                    } else {
                         //code不为0
                         onFailure(new HttpException(HttpException.ErrorType.JSON, "json error"));
                     }

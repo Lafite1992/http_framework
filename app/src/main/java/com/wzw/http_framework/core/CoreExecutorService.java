@@ -30,7 +30,7 @@ public class CoreExecutorService {
         }
     };
 
-    public static final ExecutorService THREAD_POOL_EXECUTOR =
+    private static final ExecutorService THREAD_POOL_EXECUTOR =
             new ThreadPoolExecutor(CORE_POOL_SIZE,MAXIMUM_POOL_SIZE,KEEP_ALIVE_TIME
             , TimeUnit.SECONDS,sPoolWorkQueue,sThreadFactory);
 
