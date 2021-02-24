@@ -9,4 +9,4 @@ HttpRequest + JsonParse,需要的实体Bean在主线程中返回;
 在网络请求失败的情况下，根据ErrorType可以方便的定位问题所在，易于debug
 支持取消网络请求,绑定activity生命周期，在activity被销毁时取消相关的Request
 
-更多功能待后续扩展，此框架会不断完善   
+
